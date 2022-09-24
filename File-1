@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+    stages {
+        stage('Cleanup Workspace') {
+          steps {
+                cleanWs()
+                sh """
+                echo "Cleaned Up Workspace for ${JOB_NAME}"
+                """
+            }
+          }
+        stage('Checkout SCM'){
+            steps {
+                git url: 'https://github.com/Jagadeesh099/Pumpkin.git'
+                
+            }
+        }
+        stage('Diff') {
+            steps {
+              sh """
+            
+                git fetch origin  master
+                git fetch origin dev
+                git diff remotes/origin/master remotes/origin/dev 
+                """
+            }
+        }
+    }
+}
